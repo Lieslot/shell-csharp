@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Data;
 
 class Program
@@ -23,6 +24,13 @@ class Program
                 break;
             }
 
+            if (command == "echo") {
+                string[] args = parsedCommand[1..];
+
+                echo(args);
+                continue;
+            }
+
             Console.WriteLine($"{input}: command not found");
         }
 
@@ -31,7 +39,21 @@ class Program
     private static string[] parse(string command) {
 
         var parsedCommand = command.Split(" ");
-
         return parsedCommand;
+    }
+
+    private static void echo(string[] args) {
+        var idx = 0;
+        foreach ( var arg in args ) {
+            if (idx == 0) {
+                Console.Write(arg);
+                idx++;
+                continue;
+            }
+
+            Console.Write($" {arg}");
+            idx++;
+        }
+        Console.WriteLine();
     }
 }
