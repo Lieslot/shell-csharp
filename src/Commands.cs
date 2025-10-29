@@ -4,7 +4,8 @@ public enum BuiltinCommands
 {
     echo,
     type,
-    exit
+    exit,
+    pwd
 
 
 }
