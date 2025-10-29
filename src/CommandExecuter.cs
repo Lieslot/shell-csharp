@@ -61,19 +61,19 @@ public class CommandExecuter
         Console.WriteLine($"{target}: not found");
     }
 
-    public bool ExecuteBy(string target, string[] args )
+    public bool ExecuteBy(string target, string[] args)
     {
         // PATHの環境変数の値を取得
         string path = Environment.GetEnvironmentVariable("PATH");
-        
-        
+
+
         if (path == null)
         {
             return false;
         }
 
         // splitで対象のディレクトリをリスト化する
-        List<string> directories =  [.. path.Split(Path.PathSeparator)];
+        List<string> directories = [.. path.Split(Path.PathSeparator)];
         var filePath = ExecutableFileFinder.FindPathFromDirectories(directories, target);
 
         if (filePath == null)
@@ -89,8 +89,24 @@ public class CommandExecuter
 
         return true;
     }
-    
 
-    
-    
+    public void Cd(string targetPath)
+    {
+
+        if (targetPath[0].Equals(Path.DirectorySeparatorChar) || targetPath[0].Equals(Path.AltDirectorySeparatorChar))
+        {
+            if (!Directory.Exists(targetPath))
+            {
+                Console.WriteLine($"cd: {targetPath}: No such file or directory");
+                return;
+            }
+
+            Directory.SetCurrentDirectory(targetPath);
+        }
+
+        // ..の場合
+        // .の場合
+        // ~の場合 or targetPathが空の場合
+    }
+
 }

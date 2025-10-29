@@ -68,6 +68,18 @@ public class CommandHandler
                 Console.WriteLine(Directory.GetCurrentDirectory());
                 continue;
             }
+            
+            if (command == "cd")
+            {
+                if (isNoArgs(parsedCommand))
+                {
+                    parsedCommand.Add("");
+                }
+                string targetPath = parsedCommand[1];
+                executer.Cd(targetPath);
+
+                continue;
+            }
 
             var isExecuted = executer.ExecuteBy(parsedCommand[0], [.. parsedCommand.Skip(1)]);
 
@@ -75,6 +87,8 @@ public class CommandHandler
             {
                 continue;
             } 
+
+            
 
 
             Console.WriteLine($"{inputStr}: command not found");
