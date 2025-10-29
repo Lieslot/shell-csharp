@@ -68,7 +68,7 @@ public class CommandExecuter
                             return;
                         }
 
-                        Console.WriteLine($"{target} is {dir}");
+                        Console.WriteLine($"{target} is {filePath}");
                         return;
                     }
                 }
