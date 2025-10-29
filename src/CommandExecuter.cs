@@ -75,7 +75,7 @@ public class CommandExecuter
             return false;
         }
         Process process = new Process();
-        process.StartInfo.FileName = filePath;
+        process.StartInfo.FileName = Path.GetFileNameWithoutExtension(filePath);
         process.StartInfo.Arguments = string.Join(" ", args);
 
         process.Start();
