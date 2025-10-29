@@ -33,6 +33,7 @@ public class CommandExecuter
         if (Enum.TryParse<BuiltinCommands>(target, ignoreCase: true, out _))
         {
             Console.WriteLine($"{target} is a shell builtin");
+            return;
         }
         else
         {
@@ -50,9 +51,14 @@ public class CommandExecuter
 
             var filePath = ExecutableFileFinder.FindPathFromDirectories(directories, target);
 
-            Console.WriteLine($"{target} is {filePath}");
-            Console.WriteLine($"{target}: not found");
+            if (filePath != null)
+            {
+                Console.WriteLine($"{target} is {filePath}");
+                return;
+            }
         }
+
+        Console.WriteLine($"{target}: not found");
     }
 
     public bool ExecuteBy(string target, string[] args )
