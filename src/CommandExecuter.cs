@@ -67,7 +67,7 @@ public class CommandExecuter
         }
 
         // splitで対象のディレクトリをリスト化する
-        List<string> directories =  ["", .. path.Split(Path.PathSeparator)];
+        List<string> directories =  [.. path.Split(Path.PathSeparator)];
         var filePath = ExecutableFileFinder.FindPathFromDirectories(directories, target);
 
         if (filePath == null)
@@ -75,7 +75,7 @@ public class CommandExecuter
             return false;
         }
 
-        Process.Start(filePath, args);
+        Process.Start(Path.GetFileNameWithoutExtension(filePath), args);
 
         return true;
     }
