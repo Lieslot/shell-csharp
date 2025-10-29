@@ -75,7 +75,7 @@ public class CommandExecuter
             return false;
         }
 
-        Process.Start(filePath, target);
+        Process.Start( Path.GetFileNameWithoutExtension(filePath), target);
 
         return true;
     }
