@@ -63,6 +63,12 @@ public class CommandHandler
                 continue;
             }
 
+            if (command == "pwd")
+            {
+                Console.WriteLine(Directory.GetCurrentDirectory());
+                continue;
+            }
+
             var isExecuted = executer.ExecuteBy(parsedCommand[0], [.. parsedCommand.Skip(1)]);
 
             if (isExecuted)
