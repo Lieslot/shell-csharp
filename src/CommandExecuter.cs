@@ -65,7 +65,7 @@ public class CommandExecuter
 
                         if (!FilePermissionChecker.CanExecute($"{filePath}"))
                         {
-                            return;
+                            continue;
                         }
 
                         Console.WriteLine($"{target} is {filePath}");
