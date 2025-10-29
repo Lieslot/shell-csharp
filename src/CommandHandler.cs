@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 
@@ -55,12 +56,20 @@ public class CommandHandler
                     parsedCommand.Add("");
                 }
 
-                List<string> args = [..parsedCommand.Skip(1)];
+                List<string> args = [.. parsedCommand.Skip(1)];
 
 
                 executer.type(args);
                 continue;
             }
+
+            var isExecuted = executer.ExecuteBy(parsedCommand[0], [.. parsedCommand.Skip(1)]);
+
+            if (isExecuted) 
+            {
+                return;
+            } 
+
 
             Console.WriteLine($"{inputStr}: command not found");
         }

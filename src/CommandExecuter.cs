@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -35,46 +36,48 @@ public class CommandExecuter
         }
         else
         {
-
             // PATHの環境変数の値を取得
             string path = Environment.GetEnvironmentVariable("PATH");
 
             if (path == null)
             {
                 Console.WriteLine($"{target}: not found");
-
+                return;
             }
 
             // splitで対象のディレクトリをリスト化する
             List<string> directories = [.. path.Split(Path.PathSeparator)];
-            // ディレクトリをリスト探索する]
-            foreach (var dir in directories)
-            {
-                if (!Directory.Exists(dir))
-                {
-                    continue;
-                }
 
-                foreach (var filePath in Directory.EnumerateFiles(dir))
-                {
+            var filePath = ExecutableFileFinder.FindPathFromDirectories(directories, target);
 
-                    var fileName = Path.GetFileNameWithoutExtension(filePath);
-
-                    if (fileName.Equals(target))
-                    {
-
-                        if (!FilePermissionChecker.CanExecute($"{filePath}"))
-                        {
-                            continue;
-                        }
-
-                        Console.WriteLine($"{target} is {filePath}");
-                        return;
-                    }
-                }
-            }
+            Console.WriteLine($"{target} is {filePath}");
             Console.WriteLine($"{target}: not found");
         }
+    }
+
+    public bool ExecuteBy(string target, string[] args )
+    {
+        // PATHの環境変数の値を取得
+        string path = Environment.GetEnvironmentVariable("PATH");
+        
+        
+        if (path == null)
+        {
+            return false;
+        }
+
+        // splitで対象のディレクトリをリスト化する
+        List<string> directories = [.. path.Split(Path.PathSeparator)];
+        var filePath = ExecutableFileFinder.FindPathFromDirectories(directories, target);
+
+        if (filePath == null)
+        {
+            return false;
+        }
+
+        Process.Start(filePath, target);
+
+        return true;
     }
     
 
