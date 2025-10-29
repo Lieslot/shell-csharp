@@ -67,7 +67,7 @@ public class CommandExecuter
         }
 
         // splitで対象のディレクトリをリスト化する
-        List<string> directories = [.. path.Split(Path.PathSeparator)];
+        List<string> directories = (List<string>)new List<string>([""]).Concat([.. path.Split(Path.PathSeparator)]);
         var filePath = ExecutableFileFinder.FindPathFromDirectories(directories, target);
 
         if (filePath == null)
