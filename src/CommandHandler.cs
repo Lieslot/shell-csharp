@@ -65,7 +65,7 @@ public class CommandHandler
 
             var isExecuted = executer.ExecuteBy(parsedCommand[0], [.. parsedCommand.Skip(1)]);
 
-            if (isExecuted) 
+            if (isExecuted)
             {
                 continue;
             } 

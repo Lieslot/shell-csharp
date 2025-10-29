@@ -74,8 +74,12 @@ public class CommandExecuter
         {
             return false;
         }
+        Process process = new Process();
+        process.StartInfo.FileName = filePath;
+        process.StartInfo.Arguments = string.Join(" ", args);
 
-        Process.Start(Path.GetFileNameWithoutExtension(filePath), args);
+        process.Start();
+        process.WaitForExit();
 
         return true;
     }
