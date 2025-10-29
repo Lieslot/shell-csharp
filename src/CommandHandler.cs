@@ -67,7 +67,7 @@ public class CommandHandler
 
             if (isExecuted) 
             {
-                return;
+                continue;
             } 
 
 
