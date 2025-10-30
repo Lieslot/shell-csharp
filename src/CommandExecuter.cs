@@ -99,8 +99,7 @@ public class CommandExecuter
             
             foreach (var arg in args)
             {
-                var cleanArg = StringUtils.RemoveQuotes(arg);
-                process.StartInfo.ArgumentList.Add(cleanArg);
+                process.StartInfo.ArgumentList.Add(arg);
             }
 
             process.Start();
