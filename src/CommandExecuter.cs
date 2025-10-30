@@ -103,6 +103,15 @@ public class CommandExecuter
     {
         if (targetPath == "" || targetPath == "~")
         {
+            string? homeDir = Environment.GetEnvironmentVariable("HOME");
+
+            if (homeDir == null)
+            {
+                Console.WriteLine($"cd: {targetPath}: No such file or directory");
+            }
+
+            Directory.SetCurrentDirectory(homeDir);
+
             return;
         }
 
