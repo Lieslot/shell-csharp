@@ -14,13 +14,14 @@ public class CommandExecuter
         var idx = 0;
         foreach (var arg in args)
         {
+            var targetArg = StringUtils.RemoveSingleQuotes(arg);
             if (idx == 0)
             {
-                Console.Write(arg);
+                Console.Write(targetArg);
                 idx++;
                 continue;
             }
-            Console.Write($" {arg}");
+            Console.Write($" {targetArg}");
             idx++;
         }
 
@@ -83,9 +84,17 @@ public class CommandExecuter
 
         try
         {
+
+
             Process process = new Process();
             process.StartInfo.FileName = Path.GetFileNameWithoutExtension(filePath);
-            process.StartInfo.Arguments = string.Join(" ", args);
+            
+            foreach (var arg in args)
+            {
+                var cleanArg = StringUtils.RemoveSingleQuotes(arg);
+                process.StartInfo.ArgumentList.Add(cleanArg);
+            }
+
             process.Start();
             process.WaitForExit();
         }
