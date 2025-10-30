@@ -38,7 +38,7 @@ public class CommandExecuter
         else
         {
             // PATHの環境変数の値を取得
-            string path = Environment.GetEnvironmentVariable("PATH");
+            string? path = Environment.GetEnvironmentVariable("PATH");
 
             if (path == null)
             {
@@ -64,7 +64,7 @@ public class CommandExecuter
     public bool ExecuteBy(string target, string[] args)
     {
         // PATHの環境変数の値を取得
-        string path = Environment.GetEnvironmentVariable("PATH");
+        string? path = Environment.GetEnvironmentVariable("PATH");
 
 
         if (path == null)
@@ -80,32 +80,39 @@ public class CommandExecuter
         {
             return false;
         }
-        Process process = new Process();
-        process.StartInfo.FileName = Path.GetFileNameWithoutExtension(filePath);
-        process.StartInfo.Arguments = string.Join(" ", args);
 
-        process.Start();
-        process.WaitForExit();
+        try
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = Path.GetFileNameWithoutExtension(filePath);
+            process.StartInfo.Arguments = string.Join(" ", args);
+            process.Start();
+            process.WaitForExit();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
 
         return true;
+
     }
 
-    public void Cd(string targetPath)
+    public void cd(string targetPath)
     {
-
-        if (targetPath[0].Equals(Path.DirectorySeparatorChar) || targetPath[0].Equals(Path.AltDirectorySeparatorChar))
+        if (targetPath == "" || targetPath == "~")
         {
+            return;
+        }
+
             if (!Directory.Exists(targetPath))
             {
                 Console.WriteLine($"cd: {targetPath}: No such file or directory");
                 return;
             }
-
             Directory.SetCurrentDirectory(targetPath);
-        }
 
-        // ..の場合
-        // .の場合
         // ~の場合 or targetPathが空の場合
     }
 

@@ -5,7 +5,8 @@ public enum BuiltinCommands
     echo,
     type,
     exit,
-    pwd
+    pwd,
+    cd
 
 
 }

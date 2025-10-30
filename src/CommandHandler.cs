@@ -23,11 +23,11 @@ public class CommandHandler
             Console.Write("$ ");
 
             // ユーザーのinputを受け取る
-            string inputStr = Console.ReadLine();
+            string? inputStr = Console.ReadLine();
 
-            if (inputStr == "")
+            if (inputStr == null)
             {
-                Console.WriteLine($"{inputStr}: command not found");
+                Console.WriteLine($": command not found");
                 continue;
             }
 
@@ -76,7 +76,7 @@ public class CommandHandler
                     parsedCommand.Add("");
                 }
                 string targetPath = parsedCommand[1];
-                executer.Cd(targetPath);
+                executer.cd(targetPath);
 
                 continue;
             }
