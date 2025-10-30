@@ -91,7 +91,6 @@ public class CommandHandler
 
             if (isExecuted)
             {
-                Console.WriteLine();
                 continue;
             } 
 
