@@ -4,24 +4,32 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 
 public class CommandExecuter
 {
     public void echo(List<string> args)
     {
+        /*
+        quoteは一つの引数として扱う
+        単純なスペースは全部つぶす
+
+        'の場合stackに入れる single quote flag　= true
+        次の
+        "の場合
+        */
 
         var idx = 0;
         foreach (var arg in args)
         {
-            var targetArg = StringUtils.RemoveQuotes(arg);
             if (idx == 0)
             {
-                Console.Write(targetArg);
+                Console.Write(arg);
                 idx++;
                 continue;
             }
-            Console.Write($" {targetArg}");
+            Console.Write($" {arg}");
             idx++;
         }
 

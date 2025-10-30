@@ -31,7 +31,7 @@ public class CommandHandler
                 continue;
             }
 
-            List<string> parsedCommand = parse(inputStr);
+            List<string> parsedCommand = CommandParser.Parse(inputStr);
 
             var command = parsedCommand[0];
 
