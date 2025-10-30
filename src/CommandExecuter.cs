@@ -108,6 +108,7 @@ public class CommandExecuter
             if (homeDir == null)
             {
                 Console.WriteLine($"cd: {targetPath}: No such file or directory");
+                return;
             }
 
             Directory.SetCurrentDirectory(homeDir);
