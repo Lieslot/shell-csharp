@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 public static class CommandParser
 
 {
-
-
+    private  const char SINGLE_QUOTE = '\'';
+    private  const char DOUBLE_QUOTE = '\"';
+ 
     
     public static List<string> Parse(string target)
     {   
@@ -21,18 +22,18 @@ public static class CommandParser
 
             char s = target[i];
 
-            if (s == '\'')
+            if (s == SINGLE_QUOTE)
             {
                 StringBuilder singleQuoteArgBuilder = new("");
                 i++;
-                while (i < target.Length && target[i] != '\'')
+                while (i < target.Length && target[i] != SINGLE_QUOTE)
                 {
                     singleQuoteArgBuilder.Append(target[i]);
 
                     i++;
                 }
                 curArgBuilder.Append(singleQuoteArgBuilder.ToString());
-                prevChar = '\'';
+                prevChar = SINGLE_QUOTE;
                 continue;
             }
 
@@ -40,14 +41,14 @@ public static class CommandParser
             {
                 StringBuilder singleQuoteArgBuilder = new("");
                 i++;
-                while (i < target.Length && target[i] != '\'')
+                while (i < target.Length && target[i] != DOUBLE_QUOTE)
                 {
                     singleQuoteArgBuilder.Append(target[i]);
 
                     i++;
                 }
                 curArgBuilder.Append(singleQuoteArgBuilder.ToString());
-                prevChar = '\"';
+                prevChar = DOUBLE_QUOTE;
                 continue;
             }
 
