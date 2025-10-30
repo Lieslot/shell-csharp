@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 public class StringUtils
 {
     
-    public static string RemoveSingleQuotes(string target)
+    public static string RemoveQuotes(string target)
     {
-        return target.Trim('\'');
+        return target.Trim('\'').Trim('\"');
     }
 }

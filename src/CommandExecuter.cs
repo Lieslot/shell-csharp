@@ -14,7 +14,7 @@ public class CommandExecuter
         var idx = 0;
         foreach (var arg in args)
         {
-            var targetArg = StringUtils.RemoveSingleQuotes(arg);
+            var targetArg = StringUtils.RemoveQuotes(arg);
             if (idx == 0)
             {
                 Console.Write(targetArg);
@@ -91,7 +91,7 @@ public class CommandExecuter
             
             foreach (var arg in args)
             {
-                var cleanArg = StringUtils.RemoveSingleQuotes(arg);
+                var cleanArg = StringUtils.RemoveQuotes(arg);
                 process.StartInfo.ArgumentList.Add(cleanArg);
             }
 
