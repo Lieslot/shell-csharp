@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +21,6 @@ public static class CommandParser
 
         for (var i = 0; i < target.Length; i++)
         {
-            // \\は　\
-            // \も \
-            // \は 
 
             char s = target[i];
 
@@ -49,13 +47,17 @@ public static class CommandParser
                 {
                     if (target[i] == ESCAPE && i + 1 < target.Length)
                     {
-                        // Inside double quotes: \\ becomes \, and \<any> becomes <any>
                         if (target[i + 1] == ESCAPE)
                         {
                             doubleQuoteArgBuilder.Append(ESCAPE);
                             i += 2;
                         }
-                        else 
+                        else if (target[i + 1] == DOUBLE_QUOTE)
+                        {
+                            doubleQuoteArgBuilder.Append(DOUBLE_QUOTE);
+                            i += 2;
+                        }
+                        else
                         {
                             doubleQuoteArgBuilder.Append(ESCAPE);
                             i++;
@@ -73,7 +75,6 @@ public static class CommandParser
 
             if (s == ESCAPE)
             {
-                // In unquoted context: backslash escapes the next character
                 if (i+1 < target.Length)
                 {
                     i++;
