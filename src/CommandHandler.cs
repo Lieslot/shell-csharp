@@ -33,6 +33,12 @@ public class CommandHandler
 
             List<string> parsedCommand = CommandParser.Parse(inputStr);
 
+            if (parsedCommand.Count == 0)
+            {
+                Console.WriteLine($": command not found");
+                continue;
+            }
+
             var command = parsedCommand[0];
 
             if (command == "exit")

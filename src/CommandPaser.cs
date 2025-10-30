@@ -9,16 +9,20 @@ public static class CommandParser
 {
     private  const char SINGLE_QUOTE = '\'';
     private  const char DOUBLE_QUOTE = '\"';
+    private  const char ESCAPE = '\\';
  
     
     public static List<string> Parse(string target)
     {   
         char prevChar = ' ';
-        StringBuilder curArgBuilder = new StringBuilder();
+        var curArgBuilder = new StringBuilder();
         var commands = new List<string>();
 
         for (var i = 0; i < target.Length; i++)
         {
+            // \\は　\
+            // \も \
+            // \は 
 
             char s = target[i];
 
@@ -39,19 +43,49 @@ public static class CommandParser
 
             if (s == '\"')
             {
-                StringBuilder singleQuoteArgBuilder = new("");
+                StringBuilder doubleQuoteArgBuilder = new("");
                 i++;
                 while (i < target.Length && target[i] != DOUBLE_QUOTE)
                 {
-                    singleQuoteArgBuilder.Append(target[i]);
+                    if (target[i] == ESCAPE && i + 1 < target.Length)
+                    {
+                        // Inside double quotes: \\ becomes \, and \<any> becomes <any>
+                        if (target[i + 1] == ESCAPE)
+                        {
+                            doubleQuoteArgBuilder.Append(ESCAPE);
+                            i += 2;
+                        }
+                        else if (target[i + 1] == ' ')
+                        {
+                            doubleQuoteArgBuilder.Append("\\ ");
+                            i += 2;
+                        }
+                        else 
+                        {
+                            i++;
+                        }
+                        continue;
+                    }
 
+                    doubleQuoteArgBuilder.Append(target[i]);
                     i++;
                 }
-                curArgBuilder.Append(singleQuoteArgBuilder.ToString());
+                curArgBuilder.Append(doubleQuoteArgBuilder.ToString());
                 prevChar = DOUBLE_QUOTE;
                 continue;
             }
 
+            if (s == '\\')
+            {
+                // In unquoted context: backslash escapes the next character
+                if (i+1 < target.Length)
+                {
+                    i++;
+                    curArgBuilder.Append(target[i]);
+                    prevChar = target[i];
+                    continue;
+                }
+            }
 
             var isEndOfCommand = prevChar != ' ' && s == ' ';
 
@@ -62,7 +96,6 @@ public static class CommandParser
 
             if (isEndOfCommand)
             {
-
                 commands.Add(curArgBuilder.ToString());
                 curArgBuilder.Clear();
             }
