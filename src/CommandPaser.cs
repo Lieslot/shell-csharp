@@ -55,13 +55,9 @@ public static class CommandParser
                             doubleQuoteArgBuilder.Append(ESCAPE);
                             i += 2;
                         }
-                        else if (target[i + 1] == ' ')
-                        {
-                            doubleQuoteArgBuilder.Append("\\ ");
-                            i += 2;
-                        }
                         else 
                         {
+                            doubleQuoteArgBuilder.Append(ESCAPE);
                             i++;
                         }
                         continue;
