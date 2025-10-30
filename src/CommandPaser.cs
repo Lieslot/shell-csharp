@@ -35,6 +35,23 @@ public static class CommandParser
                 prevChar = '\'';
                 continue;
             }
+
+            if (s == '\"')
+            {
+                StringBuilder singleQuoteArgBuilder = new("");
+                i++;
+                while (i < target.Length && target[i] != '\'')
+                {
+                    singleQuoteArgBuilder.Append(target[i]);
+
+                    i++;
+                }
+                curArgBuilder.Append(singleQuoteArgBuilder.ToString());
+                prevChar = '\"';
+                continue;
+            }
+
+
             var isEndOfCommand = prevChar != ' ' && s == ' ';
 
             if (s != ' ')
