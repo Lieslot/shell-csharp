@@ -41,7 +41,7 @@ public static class CommandParser
                 continue;
             }
 
-            if (s == '\"')
+            if (s == DOUBLE_QUOTE)
             {
                 StringBuilder doubleQuoteArgBuilder = new("");
                 i++;
@@ -71,7 +71,7 @@ public static class CommandParser
                 continue;
             }
 
-            if (s == '\\')
+            if (s == ESCAPE)
             {
                 // In unquoted context: backslash escapes the next character
                 if (i+1 < target.Length)
