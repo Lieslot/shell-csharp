@@ -5,29 +5,26 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 
-public class CommandHandler
+public class CommandHandler(CommandDispatcher commandDispatcher, IOutputWriter outputWriter)
+
 
 {
 
-    public readonly CommandExecuter executer;
-
-    public CommandHandler()
-    {
-        executer = new CommandExecuter();
-    }
+    private readonly CommandDispatcher dispatcher = commandDispatcher;
+    private readonly IOutputWriter writer = outputWriter;
 
     public void handle()
     {
         while (true)
         {
-            Console.Write("$ ");
+            writer.Write("$ ", isError: false);
 
             // ユーザーのinputを受け取る
             string? inputStr = Console.ReadLine();
 
             if (inputStr == null)
             {
-                Console.WriteLine($": command not found");
+                writer.WriteLine($": command not found", isError: true);
                 continue;
             }
 
@@ -35,7 +32,7 @@ public class CommandHandler
 
             if (parsedCommand.Count == 0)
             {
-                Console.WriteLine($": command not found");
+                writer.WriteLine($": command not found", isError: true);
                 continue;
             }
 
@@ -46,72 +43,11 @@ public class CommandHandler
                 break;
             }
 
-            if (command == "echo")
-            {
+            dispatcher.Dispatch(parsedCommand);
 
-                List<string> args = [.. parsedCommand.Skip(1)];
-
-                executer.echo(args);
-                continue;
-            }
-
-            if (command == "type")
-            {
-                if (isNoArgs(parsedCommand))
-                {
-                    parsedCommand.Add("");
-                }
-
-                List<string> args = [.. parsedCommand.Skip(1)];
-
-
-                executer.type(args);
-                continue;
-            }
-
-            if (command == "pwd")
-            {
-                Console.WriteLine(Directory.GetCurrentDirectory());
-                continue;
-            }
-            
-            if (command == "cd")
-            {
-                if (isNoArgs(parsedCommand))
-                {
-                    parsedCommand.Add("");
-                }
-                string targetPath = parsedCommand[1];
-                executer.cd(targetPath);
-
-                continue;
-            }
-
-            var isExecuted = executer.ExecuteBy(parsedCommand[0], [.. parsedCommand.Skip(1)]);
-
-            if (isExecuted)
-            {
-                continue;
-            } 
-
-            
-
-
-            Console.WriteLine($"{inputStr}: command not found");
         }
     }
 
-    private List<string> parse(string command)
-    {
-
-        var parsedCommand = command.Split(" ");
-        if (parsedCommand.Length == 1)
-        {
-            return [.. parsedCommand];
-        }
-        return [.. parsedCommand];
-    }
-    
     private bool isNoArgs(List<string> commands)
     {
         return commands.Count == 1;

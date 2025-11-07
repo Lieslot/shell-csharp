@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 public class CommandExecuter
 {
-    public void echo(List<string> args)
+    public Result echo(List<string> args)
     {
         /*
         quoteは一つの引数として扱う
@@ -20,29 +20,18 @@ public class CommandExecuter
         "の場合
         */
 
-        var idx = 0;
-        foreach (var arg in args)
-        {
-            if (idx == 0)
-            {
-                Console.Write(arg);
-                idx++;
-                continue;
-            }
-            Console.Write($" {arg}");
-            idx++;
-        }
+        string target = string.Join(" ", args);
 
-        Console.WriteLine();
+        return new Result(IsSuccess: true, target);
     }
-    public void type(List<string> args)
+    public Result type(List<string> args)
     {
         string target = args[0];
 
         if (Enum.TryParse<BuiltinCommands>(target, ignoreCase: true, out _))
         {
-            Console.WriteLine($"{target} is a shell builtin");
-            return;
+
+            return new Result(IsSuccess: true, $"{target} is a shell builtin");
         }
         else
         {
@@ -51,8 +40,7 @@ public class CommandExecuter
 
             if (path == null)
             {
-                Console.WriteLine($"{target}: not found");
-                return;
+                return new Result(IsSuccess: false, $"{target} is a shell builtin");
             }
 
             // splitで対象のディレクトリをリスト化する
@@ -62,15 +50,14 @@ public class CommandExecuter
 
             if (filePath != null)
             {
-                Console.WriteLine($"{target} is {filePath}");
-                return;
+                return new Result(IsSuccess: true, $"{target} is {filePath}");
             }
         }
 
-        Console.WriteLine($"{target}: not found");
+        return new Result(IsSuccess: false, $"{target}: not found");
     }
 
-    public bool ExecuteBy(string target, string[] args)
+    public Result ExecuteBy(string target, string[] args)
     {
         // PATHの環境変数の値を取得
         string? path = Environment.GetEnvironmentVariable("PATH");
@@ -78,7 +65,7 @@ public class CommandExecuter
 
         if (path == null)
         {
-            return false;
+            return new Result(false, $"{target}: command not found");
         }
 
         // splitで対象のディレクトリをリスト化する
@@ -87,16 +74,14 @@ public class CommandExecuter
 
         if (filePath == null)
         {
-            return false;
+            return new Result(false, $"{target}: command not");
         }
 
         try
         {
-
-
             Process process = new Process();
             process.StartInfo.FileName = Path.GetFileNameWithoutExtension(filePath);
-            
+
             foreach (var arg in args)
             {
                 process.StartInfo.ArgumentList.Add(arg);
@@ -104,40 +89,39 @@ public class CommandExecuter
 
             process.Start();
             process.WaitForExit();
+
+            return new Result(true, "");
+
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            // TODO: ファイルパスを探せなかった場合とプロセスが失敗した場合を分ける
+            return new Result(false, e.Message);
         }
 
 
-        return true;
 
     }
 
-    public void cd(string targetPath)
+    public Result Cd(string targetPath)
     {
         if (targetPath == "" || targetPath == "~")
         {
             string? homeDir = Environment.GetEnvironmentVariable("HOME");
 
-            if (homeDir == null)
-            {
-                Console.WriteLine($"cd: {targetPath}: No such file or directory");
-                return;
-            }
-
             Directory.SetCurrentDirectory(homeDir);
 
-            return;
         }
 
-            if (!Directory.Exists(targetPath))
-            {
-                Console.WriteLine($"cd: {targetPath}: No such file or directory");
-                return;
-            }
-            Directory.SetCurrentDirectory(targetPath);
+        if (!Directory.Exists(targetPath))
+        {
+            return new Result(true, $"cd: {targetPath}: No such file or directory");
+        }
+
+        Directory.SetCurrentDirectory(targetPath);
+
+        return new Result(IsSuccess: true, "");
+
 
         // ~の場合 or targetPathが空の場合
     }

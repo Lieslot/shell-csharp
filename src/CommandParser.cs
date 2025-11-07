@@ -11,10 +11,10 @@ public static class CommandParser
     private  const char SINGLE_QUOTE = '\'';
     private  const char DOUBLE_QUOTE = '\"';
     private  const char ESCAPE = '\\';
- 
-    
+
+
     public static List<string> Parse(string target)
-    {   
+    {
         char prevChar = ' ';
         var curArgBuilder = new StringBuilder();
         var commands = new List<string>();
@@ -75,7 +75,7 @@ public static class CommandParser
 
             if (s == ESCAPE)
             {
-                if (i+1 < target.Length)
+                if (i + 1 < target.Length)
                 {
                     i++;
                     curArgBuilder.Append(target[i]);
