@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Data;
+using System.Threading.Tasks;
 
 class Program
 {
-    static void Main()
+    static async Task Main()
     {
 
-
-        var commandExecuter = new CommandExecuter();
         var outputWriter = new ConsoleOutputWriter();
-        var commandController = new CommandController(executer: commandExecuter, writer: outputWriter);
+        var commandController = new CommandController(writer: outputWriter);
         var commandDispatcher = new CommandDispatcher(controller: commandController);
         var commandHandler = new CommandHandler(commandDispatcher, outputWriter);
 
-        commandHandler.handle();
+        await commandHandler.handle();
         // validation -> C#
         // input -> 
         // output = ロジック

@@ -5,18 +5,16 @@ using System.Threading.Tasks;
 
 
 [Controller]
-public class CommandController(CommandExecuter executer, IOutputWriter writer)
+public class CommandController(IOutputWriter writer)
 {
 
-    private readonly CommandExecuter executer = executer;
     private readonly IOutputWriter writer = writer;
 
     [CommandRoute(command: "echo")]
     public void Echo(List<string> command)
     {
         List<string> args = [.. command.Skip(1)];
-
-        Result result = executer.echo(args);
+        Result result = CommandExecuter.Echo(args);
 
 
         writer.WriteLine(result.Data, !result.IsSuccess);
@@ -34,7 +32,7 @@ public class CommandController(CommandExecuter executer, IOutputWriter writer)
         List<string> args = [.. command.Skip(1)];
 
 
-        Result result = executer.type(args);
+        Result result = CommandExecuter.Type(args);
 
         writer.WriteLine(result.Data, !result.IsSuccess);
 
@@ -48,7 +46,7 @@ public class CommandController(CommandExecuter executer, IOutputWriter writer)
             command.Add("");
         }
         string targetPath = command[1];
-        Result result = executer.Cd(targetPath);
+        Result result = CommandExecuter.Cd(targetPath);
 
         writer.WriteLine(result.Data, !result.IsSuccess);
 
@@ -65,7 +63,7 @@ public class CommandController(CommandExecuter executer, IOutputWriter writer)
     [CommandRoute(isDefault: true)]
     public void executeBy(List<string> command)
     {
-        Result result = executer.ExecuteBy(command[0], [.. command.Skip(1)]);
+        Result result = CommandExecuter.ExecuteBy(command[0], [.. command.Skip(1)]);
 
         if (result.IsSuccess)
         {

@@ -7,9 +7,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-public class CommandExecuter
+public static class CommandExecuter
 {
-    public Result echo(List<string> args)
+    public static Result Echo(List<string> args)
     {
         /*
         quoteは一つの引数として扱う
@@ -24,7 +24,7 @@ public class CommandExecuter
 
         return new Result(IsSuccess: true, target);
     }
-    public Result type(List<string> args)
+    public static Result Type(List<string> args)
     {
         string target = args[0];
 
@@ -57,7 +57,7 @@ public class CommandExecuter
         return new Result(IsSuccess: false, $"{target}: not found");
     }
 
-    public Result ExecuteBy(string target, string[] args)
+    public static Result ExecuteBy(string target, string[] args)
     {
         // PATHの環境変数の値を取得
         string? path = Environment.GetEnvironmentVariable("PATH");
@@ -103,7 +103,7 @@ public class CommandExecuter
 
     }
 
-    public Result Cd(string targetPath)
+    public static Result Cd(string targetPath)
     {
         if (targetPath == "" || targetPath == "~")
         {

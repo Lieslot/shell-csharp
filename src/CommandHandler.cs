@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Pipelines;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -13,7 +15,7 @@ public class CommandHandler(CommandDispatcher commandDispatcher, IOutputWriter o
     private readonly CommandDispatcher dispatcher = commandDispatcher;
     private readonly IOutputWriter writer = outputWriter;
 
-    public void handle()
+    public async Task handle()
     {
         while (true)
         {
@@ -28,7 +30,19 @@ public class CommandHandler(CommandDispatcher commandDispatcher, IOutputWriter o
                 continue;
             }
 
+            // pipeがあるかをチェック
+            if (inputStr.Contains('|'))
+            {
+                List<string> commands = [.. inputStr.Split('|')];
+                List<List<string>> parsedCommands = [.. commands.Select(CommandParser.Parse)];
+
+                await PipelineExecuter.Execute(parsedCommands);
+                continue;
+            }
+
             List<string> parsedCommand = CommandParser.Parse(inputStr);
+
+            // pipeがあったら入出力のストリムをFDに変える
 
             if (parsedCommand.Count == 0)
             {
