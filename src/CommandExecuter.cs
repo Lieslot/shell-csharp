@@ -110,6 +110,7 @@ public static class CommandExecuter
             string? homeDir = Environment.GetEnvironmentVariable("HOME");
 
             Directory.SetCurrentDirectory(homeDir);
+            return new Result(IsSuccess: true, "");
 
         }
 
