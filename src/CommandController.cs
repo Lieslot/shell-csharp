@@ -24,7 +24,7 @@ public class CommandController(IOutputWriter writer)
     [CommandRoute(command: "type")]
     public void Type(List<string> command)
     {
-        if (isNoArgs(command))
+        if (IsNoArgs(command))
         {
             command.Add("");
         }
@@ -41,15 +41,12 @@ public class CommandController(IOutputWriter writer)
     [CommandRoute(command: "cd")]
     public void Cd(List<string> command)
     {
-        if (isNoArgs(command))
+        if (IsNoArgs(command))
         {
             command.Add("");
         }
         string targetPath = command[1];
         Result result = CommandExecuter.Cd(targetPath);
-
-        writer.WriteLine(result.Data, !result.IsSuccess);
-
     }
 
     [CommandRoute(command: "pwd")]
@@ -61,7 +58,7 @@ public class CommandController(IOutputWriter writer)
     }
 
     [CommandRoute(isDefault: true)]
-    public void executeBy(List<string> command)
+    public void ExecuteBy(List<string> command)
     {
         Result result = CommandExecuter.ExecuteBy(command[0], [.. command.Skip(1)]);
 
@@ -74,7 +71,7 @@ public class CommandController(IOutputWriter writer)
 
     }
 
-    private bool isNoArgs(List<string> commands)
+    private static bool IsNoArgs(List<string> commands)
     {
         return commands.Count == 1;
     }
