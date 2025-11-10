@@ -74,7 +74,7 @@ public static class CommandExecuter
 
         if (filePath == null)
         {
-            return new Result(false, $"{target}: command not");
+            return new Result(false, $"{target}: command not found");
         }
 
         try
