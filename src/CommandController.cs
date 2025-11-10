@@ -47,6 +47,11 @@ public class CommandController(IOutputWriter writer)
         }
         string targetPath = command[1];
         Result result = CommandExecuter.Cd(targetPath);
+        if (result.IsSuccess == false)
+        {
+            writer.WriteLine(result.Data, isError: !result.IsSuccess);
+        }
+
     }
 
     [CommandRoute(command: "pwd")]
