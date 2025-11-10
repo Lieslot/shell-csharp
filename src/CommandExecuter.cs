@@ -115,7 +115,7 @@ public static class CommandExecuter
 
         if (!Directory.Exists(targetPath))
         {
-            return new Result(true, $"cd: {targetPath}: No such file or directory");
+            return new Result(false, $"cd: {targetPath}: No such file or directory");
         }
 
         Directory.SetCurrentDirectory(targetPath);
